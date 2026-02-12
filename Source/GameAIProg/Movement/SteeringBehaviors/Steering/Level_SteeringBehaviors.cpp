@@ -6,6 +6,7 @@
 #include <string>
 #include "imgui.h"
 #include "NetworkMessage.h"
+#include "DSP/AudioDebuggingUtilities.h"
 
 
 // Sets default values
@@ -230,6 +231,10 @@ void ALevel_SteeringBehaviors::SetAgentBehavior(ImGui_Agent& Agent)
 	//TODO; Implement behaviors setting here
 	case BehaviorTypes::Seek:
 		Agent.Behavior = std::make_unique<SteeringBehaviourSeek>();
+		break;
+	case BehaviorTypes::Flee:
+		Agent.Behavior = std::make_unique<SteeringBehaviourFlee>();
+		break;
 	default:
 		assert(false); // Incorrect Agent Behavior gotten during SetAgentBehavior()	
 	}  

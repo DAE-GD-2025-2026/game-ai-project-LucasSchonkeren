@@ -32,7 +32,13 @@ public: //------------ Constructor/Destructor --------------
 	
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent & Agent) override;
+};
+
+class SteeringBehaviourFlee final : public ISteeringBehavior
+{
+public: //------------ Constructor/Destructor --------------
+	SteeringBehaviourFlee() = default;
 	
-private:
-	
+public: //--------------- Behaviour methods ----------------
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent & Agent) override;
 };

@@ -14,3 +14,14 @@ SteeringOutput SteeringBehaviourSeek::CalculateSteering(float DeltaT, ASteeringA
 	
 	return steering;
 }
+
+
+SteeringOutput SteeringBehaviourFlee::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+	SteeringOutput steering{};
+	
+	steering.LinearVelocity = -(Target.Position - Agent.GetPosition());
+	
+	// Add debug stuff
+	
+	return steering;
+}
