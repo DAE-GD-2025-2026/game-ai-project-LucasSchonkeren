@@ -25,4 +25,14 @@ protected:
 	FTargetData Target;
 };
 
-// Your own SteeringBehaviors should follow here...
+class SteeringBehaviourSeek final : public ISteeringBehavior
+{
+public: //------------ Constructor/Destructor --------------
+	SteeringBehaviourSeek() = default;
+	
+public: //--------------- Behaviour methods ----------------
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent & Agent) override;
+	
+private:
+	
+};

@@ -5,6 +5,7 @@
 #include <format>
 #include <string>
 #include "imgui.h"
+#include "NetworkMessage.h"
 
 
 // Sets default values
@@ -227,6 +228,8 @@ void ALevel_SteeringBehaviors::SetAgentBehavior(ImGui_Agent& Agent)
 	switch (static_cast<BehaviorTypes>(Agent.SelectedBehavior))
 	{
 	//TODO; Implement behaviors setting here
+	case BehaviorTypes::Seek:
+		Agent.Behavior = std::make_unique<SteeringBehaviourSeek>();
 	default:
 		assert(false); // Incorrect Agent Behavior gotten during SetAgentBehavior()	
 	} 
