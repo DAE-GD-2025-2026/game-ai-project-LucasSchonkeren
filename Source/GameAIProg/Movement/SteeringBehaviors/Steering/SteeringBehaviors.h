@@ -62,3 +62,12 @@ const float TargetRadius{20};
 float m_MaxSpeed{BaseMaxSpeed};
 
 };
+
+class SteeringBehaviourPursuit final : public ISteeringBehavior
+{
+public: //------------ Constructor/Destructor --------------
+	SteeringBehaviourPursuit() = default;
+
+public: //--------------- Behaviour methods ----------------
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+};
