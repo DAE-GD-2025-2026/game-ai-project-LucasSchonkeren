@@ -25,3 +25,24 @@ SteeringOutput SteeringBehaviourFlee::CalculateSteering(float DeltaT, ASteeringA
 	
 	return steering;
 }
+
+SteeringBehaviourArrive::SteeringBehaviourArrive(float slowRadius, float targetRadius) :
+	SlowRadius(slowRadius),
+	TargetRadius((targetRadius))
+{
+}
+
+SteeringOutput SteeringBehaviourArrive::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+	SteeringOutput steering{};
+	
+	double distance { (Target.Position - Agent.GetPosition()).Length() };
+	double speed = std::clamp((distance - TargetRadius)/(SlowRadius-TargetRadius), 0.0, 1.0) * m_MaxSpeed;
+	Agent.SetMaxLinearSpeed(speed);
+	
+	steering.LinearVelocity = Target.Position - Agent.GetPosition();
+	
+	
+	// Add debug stuff
+	
+	return steering;
+}

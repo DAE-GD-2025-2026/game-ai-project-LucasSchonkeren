@@ -13,13 +13,15 @@ public:
 	virtual ~ISteeringBehavior() = default;
 
 	// Override to implement your own behavior
-	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent & Agent) = 0;
+	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) = 0;
 
 	void SetTarget(const FTargetData& NewTarget) { Target = NewTarget; }
-	
-	template<class T, std::enable_if_t<std::is_base_of_v<ISteeringBehavior, T>>* = nullptr>
+
+	template <class T, std::enable_if_t<std::is_base_of_v<ISteeringBehavior, T>>* = nullptr>
 	T* As()
-	{ return static_cast<T*>(this); }
+	{
+		return static_cast<T*>(this);
+	}
 
 protected:
 	FTargetData Target;
@@ -29,16 +31,34 @@ class SteeringBehaviourSeek final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
 	SteeringBehaviourSeek() = default;
-	
+
 public: //--------------- Behaviour methods ----------------
-	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent & Agent) override;
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 };
 
 class SteeringBehaviourFlee final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
 	SteeringBehaviourFlee() = default;
-	
+
 public: //--------------- Behaviour methods ----------------
-	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent & Agent) override;
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+};
+
+class SteeringBehaviourArrive final : public ISteeringBehavior
+{
+public: //------------ Constructor/Destructor --------------
+	SteeringBehaviourArrive(float slowRadius, float targetRadius);
+
+public: //--------------- Behaviour methods ----------------
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+	
+private: //-------------- Fields ----------------------------
+
+const float BaseMaxSpeed{500};
+const float SlowRadius{20};
+const float TargetRadius{20};
+
+float m_MaxSpeed{BaseMaxSpeed};
+
 };
