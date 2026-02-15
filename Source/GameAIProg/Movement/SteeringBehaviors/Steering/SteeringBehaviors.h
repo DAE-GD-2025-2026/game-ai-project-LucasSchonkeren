@@ -71,3 +71,12 @@ public: //------------ Constructor/Destructor --------------
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 };
+
+class SteeringBehaviourEvade final : public ISteeringBehavior
+{
+public: //------------ Constructor/Destructor --------------
+	SteeringBehaviourEvade() = default;
+
+public: //--------------- Behaviour methods ----------------
+	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+};

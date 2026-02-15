@@ -60,3 +60,18 @@ SteeringOutput SteeringBehaviourPursuit::CalculateSteering(float DeltaT, ASteeri
 	
 	return steering;
 }
+
+SteeringOutput SteeringBehaviourEvade::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+	SteeringOutput steering{};
+	
+	double distance { (Target.Position - Agent.GetPosition()).Length() };
+	FVector2D predictedPosition = (distance/Agent.GetMaxLinearSpeed()) * Target.LinearVelocity + Target.Position;
+	
+	steering.LinearVelocity = -(predictedPosition - Agent.GetPosition());
+	
+	
+	// Add debug stuff
+	
+	return steering;
+}
+
