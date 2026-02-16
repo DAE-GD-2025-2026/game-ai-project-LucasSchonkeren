@@ -37,10 +37,12 @@ SteeringOutput SteeringBehaviourArrive::CalculateSteering(float DeltaT, ASteerin
 	
 	double distance { (Target.Position - Agent.GetPosition()).Length() };
 	double speed = std::clamp((distance - TargetRadius)/(SlowRadius-TargetRadius), 0.0, 1.0) * m_MaxSpeed;
+	double oldSpeed {Agent.GetMaxLinearSpeed()};
 	Agent.SetMaxLinearSpeed(speed);
 	
 	steering.LinearVelocity = Target.Position - Agent.GetPosition();
 	
+	Agent.SetMaxLinearSpeed(oldSpeed);
 	
 	// Add debug stuff
 	
