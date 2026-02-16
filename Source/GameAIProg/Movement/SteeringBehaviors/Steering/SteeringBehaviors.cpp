@@ -77,3 +77,20 @@ SteeringOutput SteeringBehaviourEvade::CalculateSteering(float DeltaT, ASteering
 	return steering;
 }
 
+SteeringOutput SteeringBehaviourWander::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+	SteeringOutput steering{};
+	
+	m_Offset += FMath::RandRange(-MaxDeviation, MaxDeviation);
+	FVector2D wanderTarget{ cos(m_Offset) * Radius, sin(m_Offset) * Radius};
+	wanderTarget += Agent.GetPosition();
+	auto forwardVec{Agent.GetActorForwardVector()};
+	wanderTarget += WanderDistance * FVector2D{forwardVec.X, forwardVec.Y};
+
+	steering.LinearVelocity = wanderTarget - Agent.GetPosition();
+	
+	// Add debug stuff
+	
+	return steering;
+}
+
+
