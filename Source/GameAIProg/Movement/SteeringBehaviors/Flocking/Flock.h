@@ -34,9 +34,12 @@ public:
 	//const TArray<ASteeringAgent*>& GetNeighbors() const { return pPartitionedSpace->GetNeighbors(); }
 	//int GetNrOfNeighbors() const { return pPartitionedSpace->GetNrOfNeighbors(); }
 #else // No space partitioning
+	static constexpr size_t maxNeighbours{100};
 	void RegisterNeighbors(ASteeringAgent* const Agent);
 	int GetNrOfNeighbors() const { return NrOfNeighbors; }
 	//const TArray<ASteeringAgent*>& GetNeighbors() const { return Neighbors; }
+	const std::array<ASteeringAgent*, maxNeighbours>& GetNeighbours() const { return neighbours; }
+	
 #endif // USE_SPACE_PARTITIONING
 
 	FVector2D GetAverageNeighborPos() const;
@@ -56,7 +59,6 @@ private:
 	//TArray<FVector2D> OldPositions{};
 #else // No space partitioning
 	//TArray<ASteeringAgent*> Neighbors{};
-	static constexpr size_t maxNeighbours{100};
 	std::array<ASteeringAgent*, maxNeighbours> neighbours{};
 #endif // USE_SPACE_PARTITIONING
 	
@@ -66,11 +68,11 @@ private:
 	ASteeringAgent* pAgentToEvade{nullptr};
 	
 	//Steering Behaviors
-	//std::unique_ptr<Separation> pSeparationBehavior{};
-	//std::unique_ptr<Cohesion> pCohesionBehavior{};
-	//std::unique_ptr<VelocityMatch> pVelMatchBehavior{};
-	//std::unique_ptr<Seek> pSeekBehavior{};
-	//std::unique_ptr<Wander> pWanderBehavior{};
+	std::unique_ptr<Separation> pSeparationBehavior{std::make_unique<Separation>(this)};
+	std::unique_ptr<Cohesion> pCohesionBehavior{std::make_unique<Cohesion>(this)};
+	std::unique_ptr<Alignmment> pVelMatchBehavior{std::make_unique<Alignmment>(this)};
+	std::unique_ptr<SteeringBehaviourSeek> pSeekBehavior{std::make_unique<SteeringBehaviourSeek>()};
+	std::unique_ptr<SteeringBehaviourWander> pWanderBehavior{std::make_unique<SteeringBehaviourWander>()};
 	//std::unique_ptr<Evade> pEvadeBehavior{};
 	
 	std::unique_ptr<BlendedSteering> pBlendedSteering{};

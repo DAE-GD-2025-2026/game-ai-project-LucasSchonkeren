@@ -119,8 +119,7 @@ FVector2D Flock::GetAverageNeighborPos() const
 	FVector2D avgPosition = FVector2D::ZeroVector;
 
 	for (int i{}; i < NrOfNeighbors; ++i) {
-		auto pos = neighbours.at(i)->ActorToWorld().GetLocation();
-		avgPosition += FVector2D(pos.X, pos.Z);
+		avgPosition += neighbours.at(i)->GetPosition();
 	}
 	
 	avgPosition /= NrOfNeighbors;
