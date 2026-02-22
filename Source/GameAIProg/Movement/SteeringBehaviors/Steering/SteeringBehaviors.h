@@ -27,7 +27,7 @@ protected:
 	FTargetData Target;
 };
 
-class SteeringBehaviourSeek final : public ISteeringBehavior
+class SteeringBehaviourSeek : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
 	SteeringBehaviourSeek() = default;

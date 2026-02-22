@@ -49,6 +49,6 @@ SteeringOutput PrioritySteering::CalculateSteering(float DeltaT, ASteeringAgent&
 			break;
 	}
 
-	//If non of the behavior return a valid output, last behavior is returned
+	//If none of the behavior return a valid output, last behavior is returned
 	return Steering;
 }
