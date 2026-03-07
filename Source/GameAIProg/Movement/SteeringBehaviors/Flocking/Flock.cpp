@@ -16,7 +16,15 @@ Flock::Flock(
 {
 	Agents.SetNum(FlockSize);
 
- // TODO: initialize the flock and the memory pool
+	for (int i = 0; i < Agents.Num(); ++i)
+	{
+		while (Agents[i] == nullptr)
+		{
+		double x = FMath::FRandRange(-1000.0, 1000.0);
+		double y = FMath::FRandRange(-1000.0, 1000.0);
+			Agents[i] = pWorld->SpawnActor<ASteeringAgent>(AgentClass, FVector{x, y,90}, FRotator::ZeroRotator);
+		}
+	}
 }
 
 Flock::~Flock()
@@ -32,16 +40,18 @@ void Flock::Tick(float DeltaTime)
   // TODO: update the agent (-> the steeringbehaviors use the neighbors in the memory pool)
   // TODO: trim the agent to the world
   
-    NrOfNeighbors = 0;
 	for (auto agent : Agents) {
 		RegisterNeighbors(agent);
 		auto steering {pBlendedSteering->CalculateSteering(DeltaTime, *agent)};
+		agent->AddMovementInput(FVector{steering.LinearVelocity, 0.f});
 	}
 }
 
 void Flock::RenderDebug()
 {
  // TODO: Render all the agents in the flock
+ 
+	RenderNeighborhood();
 }
 
 void Flock::ImGuiRender(ImVec2 const& WindowPos, ImVec2 const& WindowSize)
@@ -98,11 +108,13 @@ void Flock::ImGuiRender(ImVec2 const& WindowPos, ImVec2 const& WindowSize)
 void Flock::RenderNeighborhood()
 {
  // TODO: Debugrender the neighbors for the first agent in the flock
+	DrawDebugCircle(pWorld, FVector{Agents[0]->GetPosition().X, Agents[0]->GetPosition().Y, 0}, NeighborhoodRadius, 64, FColor::Green, false, -1.f, 0, 2.f, FVector(1,0,0), FVector(0,1,0), false);
 }
 
 #ifndef GAMEAI_USE_SPACE_PARTITIONING
 void Flock::RegisterNeighbors(ASteeringAgent* const pAgent)
 { 
+	NrOfNeighbors = 0;
 	for (auto agent : Agents) {
 		if (agent == pAgent) continue;
 		if ((agent->GetPosition() - pAgent->GetPosition()).SizeSquared() > NeighborhoodRadius * NeighborhoodRadius) {

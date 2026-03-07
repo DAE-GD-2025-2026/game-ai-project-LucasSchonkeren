@@ -11,6 +11,7 @@ SteeringOutput Cohesion::CalculateSteering(float deltaT, ASteeringAgent& pAgent)
 	SteeringOutput out{};
 	
 	out.LinearVelocity = pFlock->GetAverageNeighborPos() - pAgent.GetPosition();
+	out.LinearVelocity.Normalize();
 	
 	return out;
 }
@@ -25,8 +26,10 @@ SteeringOutput Separation::CalculateSteering(float deltaT, ASteeringAgent& pAgen
 	auto neighbours {pFlock->GetNeighbours()};
 	
 	for (auto neighbour : neighbours) {
-		out.LinearVelocity += pAgent.GetPosition() - neighbour->GetPosition();
+		if (neighbour) out.LinearVelocity += pAgent.GetPosition() - neighbour->GetPosition();
 	}
+	
+	out.LinearVelocity.Normalize();
 	
 	return out;
 }
@@ -39,6 +42,7 @@ SteeringOutput Alignmment::CalculateSteering(float deltaT, ASteeringAgent& pAgen
 	SteeringOutput out{};
 
 	out.LinearVelocity = pFlock->GetAverageNeighborVelocity();
+	out.LinearVelocity.Normalize();
 
 	return out;
 }

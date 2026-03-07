@@ -62,7 +62,7 @@ private:
 	std::array<ASteeringAgent*, maxNeighbours> neighbours{};
 #endif // USE_SPACE_PARTITIONING
 	
-	float NeighborhoodRadius{200.f};
+	float NeighborhoodRadius{500.f};
 	int NrOfNeighbors{0};
 
 	ASteeringAgent* pAgentToEvade{nullptr};
@@ -75,7 +75,11 @@ private:
 	std::unique_ptr<SteeringBehaviourWander> pWanderBehavior{std::make_unique<SteeringBehaviourWander>()};
 	//std::unique_ptr<Evade> pEvadeBehavior{};
 	
-	std::unique_ptr<BlendedSteering> pBlendedSteering{};
+	std::unique_ptr<BlendedSteering> pBlendedSteering{std::make_unique<BlendedSteering>(std::vector<BlendedSteering::WeightedBehavior>({
+		BlendedSteering::WeightedBehavior{pSeparationBehavior.get(), 30},
+		BlendedSteering::WeightedBehavior{pCohesionBehavior.get(), 40}, 
+		BlendedSteering::WeightedBehavior{pVelMatchBehavior.get(), 30}
+	}))};
 	std::unique_ptr<PrioritySteering> pPrioritySteering{};
 
 	// UI and rendering
