@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 // Toggle this define to enable/disable spatial partitioning
-// #define GAMEAI_USE_SPACE_PARTITIONING
+#define GAMEAI_USE_SPACE_PARTITIONING
 
 #include "FlockingSteeringBehaviors.h"
 #include "Movement/SteeringBehaviors/SteeringAgent.h"
@@ -10,7 +10,8 @@
 #include <memory>
 #include "imgui.h"
 #ifdef GAMEAI_USE_SPACE_PARTITIONING
-#include "../SpacePartitioning/SpacePartitioning.h"
+//#include "../SpacePartitioning/SpacePartitioning.h"
+class CellSpace;
 #endif
 
 class Flock final
@@ -29,12 +30,15 @@ public:
 	void Tick(float DeltaTime);
 	void RenderDebug();
 	void ImGuiRender(ImVec2 const& WindowPos, ImVec2 const& WindowSize);
-
-#ifdef GAMEAI_USE_SPACE_PARTITIONING
-	//const TArray<ASteeringAgent*>& GetNeighbors() const { return pPartitionedSpace->GetNeighbors(); }
-	//int GetNrOfNeighbors() const { return pPartitionedSpace->GetNrOfNeighbors(); }
-#else // No space partitioning
+	
 	static constexpr size_t maxNeighbours{100};
+	
+#ifdef GAMEAI_USE_SPACE_PARTITIONING
+	std::unique_ptr<CellSpace> pPartitionedSpace{};
+	const std::array<ASteeringAgent*, maxNeighbours>& GetNeighbors() const;
+	int GetNrOfNeighbors() const;
+	TArray<FVector2D> OldPositions;
+#else // No space partitioning
 	void RegisterNeighbors(ASteeringAgent* const Agent);
 	int GetNrOfNeighbors() const { return NrOfNeighbors; }
 	//const TArray<ASteeringAgent*>& GetNeighbors() const { return Neighbors; }
@@ -62,7 +66,7 @@ private:
 	std::array<ASteeringAgent*, maxNeighbours> neighbours{};
 #endif // USE_SPACE_PARTITIONING
 	
-	float NeighborhoodRadius{500.f};
+	float NeighborhoodRadius{100.f};
 	int NrOfNeighbors{0};
 
 	ASteeringAgent* pAgentToEvade{nullptr};
@@ -86,11 +90,11 @@ private:
 		pEvadeBehavior.get(), pBlendedSteering.get()
 	})};
 
-	float CohesionWeight{35};
-	float SeparationWeight{25};
-	float AlignmentWeight{10};
-	float SeekWeight{20};
-	float WanderWeight{10};
+	float CohesionWeight{0.35f};
+	float SeparationWeight{0.25f};
+	float AlignmentWeight{0.10f};
+	float SeekWeight{0.20f};
+	float WanderWeight{0.10f};
 
 	// UI and rendering
 	bool DebugRenderSteering{true};

@@ -23,10 +23,11 @@ SteeringOutput Separation::CalculateSteering(float deltaT, ASteeringAgent& pAgen
 {
 	SteeringOutput out{};
 	
-	auto neighbours {pFlock->GetNeighbours()};
+	auto neighbours {pFlock->GetNeighbors()};
 	
-	for (auto neighbour : neighbours) {
-		if (neighbour) out.LinearVelocity += pAgent.GetPosition() - neighbour->GetPosition();
+	for (auto& neighbour : neighbours) {
+		if (neighbour) 
+			out.LinearVelocity += pAgent.GetPosition() - neighbour->GetPosition();
 	}
 	
 	out.LinearVelocity.Normalize();

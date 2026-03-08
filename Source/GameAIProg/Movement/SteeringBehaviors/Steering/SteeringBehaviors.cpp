@@ -11,7 +11,27 @@ SteeringOutput SteeringBehaviourSeek::CalculateSteering(float DeltaT, ASteeringA
 	steering.LinearVelocity = Target.Position - Agent.GetPosition();
 	steering.LinearVelocity.Normalize();
 	
-	// Add debug stuff
+
+	if (RenderDebug)
+	{
+		FVector Start(Agent.GetPosition().X, Agent.GetPosition().Y, 90.0f);
+		FVector End(
+			Start.X + steering.LinearVelocity.X * 200.0f,
+			Start.Y + steering.LinearVelocity.Y * 200.0f,
+			90.0f
+		);
+
+		DrawDebugLine(
+			Agent.GetWorld(),
+			Start,
+			End,
+			FColor::Green,
+			false,
+			0.0f,
+			0,
+			2.0f
+		);
+	}
 	
 	return steering;
 }
@@ -22,7 +42,26 @@ SteeringOutput SteeringBehaviourFlee::CalculateSteering(float DeltaT, ASteeringA
 	
 	steering.LinearVelocity = -(Target.Position - Agent.GetPosition());
 	
-	// Add debug stuff
+	if (RenderDebug)
+	{
+		FVector Start(Agent.GetPosition().X, Agent.GetPosition().Y, 90.0f);
+		FVector End(
+			Start.X + steering.LinearVelocity.X * 200.0f,
+			Start.Y + steering.LinearVelocity.Y * 200.0f,
+			90.0f
+		);
+
+		DrawDebugLine(
+			Agent.GetWorld(),
+			Start,
+			End,
+			FColor::Green,
+			false,
+			0.0f,
+			0,
+			2.0f
+		);
+	}
 	
 	return steering;
 }

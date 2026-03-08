@@ -23,6 +23,8 @@ public:
 		return static_cast<T*>(this);
 	}
 
+	
+	bool RenderDebug{true};
 protected:
 	FTargetData Target;
 };
@@ -34,6 +36,7 @@ public: //------------ Constructor/Destructor --------------
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+	
 };
 
 class SteeringBehaviourFlee final : public ISteeringBehavior
@@ -43,6 +46,8 @@ public: //------------ Constructor/Destructor --------------
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+	
+	
 };
 
 class SteeringBehaviourArrive final : public ISteeringBehavior
@@ -80,6 +85,7 @@ public: //------------ Constructor/Destructor --------------
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 	
+	
 private:
 	float MinDistance{200.f};
 };
@@ -91,6 +97,8 @@ public: //------------ Constructor/Destructor --------------
  
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+
+	
 	
 private: //-------------- Fields ----------------------------
 

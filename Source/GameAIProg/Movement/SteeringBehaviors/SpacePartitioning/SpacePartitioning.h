@@ -13,6 +13,7 @@
 
 #include "Debug/ReporterGraph.h"
 #include "Movement/SteeringBehaviors/SteeringAgent.h"
+#include "Movement/SteeringBehaviors/Flocking/Flock.h"
 
 // --- Cell ---
 // ------------
@@ -38,7 +39,7 @@ public:
 	void UpdateAgentCell(ASteeringAgent& Agent, const FVector2D& OldPos);
 
 	void RegisterNeighbors(ASteeringAgent& Agent, float QueryRadius);
-	const TArray<ASteeringAgent*>& GetNeighbors() const { return Neighbors; }
+	const std::array<ASteeringAgent*, Flock::maxNeighbours>& GetNeighbors() const { return Neighbors; }
 	int GetNrOfNeighbors() const { return NrOfNeighbors; }
 
 	//empties the cells of entities
@@ -63,7 +64,7 @@ private:
 	float CellHeight;
 
 	// Members to avoid memory allocation on every frame
-	TArray<ASteeringAgent*> Neighbors;
+	std::array<ASteeringAgent*, Flock::maxNeighbours> Neighbors{};
 	int NrOfNeighbors;
 
 	// Helper functions
