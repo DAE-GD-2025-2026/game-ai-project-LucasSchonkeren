@@ -48,8 +48,8 @@ CellSpace::CellSpace(UWorld* pWorld, float Width, float Height, int Rows, int Co
 	{
 		for (int col = 0; col < Cols; ++col)
 		{
-			float left = col * CellWidth;
-			float bottom = row * CellHeight;
+			float left = col * CellWidth - Width/2;
+			float bottom = row * CellHeight - Height/2;
 
 			Cells.emplace_back(left, bottom, CellWidth, CellHeight);
 		}
@@ -154,29 +154,17 @@ void CellSpace::RenderCells() const
 				1.f
 			);
 		}
-
-		// Draw number of agents in cell
-		FVector2D center = {
-			(cell.BoundingBox.Min.X + cell.BoundingBox.Max.X) * 0.5f,
-			(cell.BoundingBox.Min.Y + cell.BoundingBox.Max.Y) * 0.5f
-		};
-
-		DrawDebugString(
-			pWorld,
-			FVector(center.X, center.Y, 0),
-			FString::FromInt(cell.Agents.size()),
-			nullptr,
-			FColor::Green,
-			0.f
-		);
 	}
 }
 
 int CellSpace::PositionToIndex(FVector2D const & Pos) const
 {
 	// TODO Calculate the index of the cell based on the position
-	int col = static_cast<int>(Pos.X / CellWidth);
-	int row = static_cast<int>(Pos.Y / CellHeight);
+	float shiftedX = Pos.X + SpaceWidth * 0.5f;
+	float shiftedY = Pos.Y + SpaceHeight * 0.5f;
+
+	int col = static_cast<int>(shiftedX / CellWidth);
+	int row = static_cast<int>(shiftedY / CellHeight);
 
 	col = FMath::Clamp(col, 0, NrOfCols - 1);
 	row = FMath::Clamp(row, 0, NrOfRows - 1);

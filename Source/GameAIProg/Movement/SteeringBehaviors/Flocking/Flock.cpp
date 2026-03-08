@@ -21,7 +21,7 @@ Flock::Flock(
 	Agents.SetNum(FlockSize);
 	OldPositions.SetNum(FlockSize);
 
-	pPartitionedSpace = std::make_unique<CellSpace>(pWorld, 3000.f, 3000.f, 30, 30, 600);
+	pPartitionedSpace = std::make_unique<CellSpace>(pWorld, 2000.f, 2000.f, 10, 10, 1000);
 	
 	for (int i = 0; i < Agents.Num(); ++i)
 	{
@@ -62,39 +62,40 @@ void Flock::Tick(float DeltaTime)
 	pBlendedSteering->GetWeightedBehaviorsRef()[2].pBehavior->RenderDebug = DebugRenderSteering;
 	pBlendedSteering->GetWeightedBehaviorsRef()[3].pBehavior->RenderDebug = DebugRenderSteering;
 	pBlendedSteering->GetWeightedBehaviorsRef()[4].pBehavior->RenderDebug = DebugRenderSteering;
+	pEvadeBehavior->RenderDebug = DebugRenderSteering;
   
 	pEvadeBehavior->SetTarget(FTargetData{pAgentToEvade->GetPosition()});
 	pAgentToEvade->SetSteeringBehavior(pWanderBehavior.get());
   
 #ifdef GAMEAI_USE_SPACE_PARTITIONING
-	// store old positions
 	for (int i = 0; i < Agents.Num(); i++)
 	{
 		OldPositions[i] = Agents[i]->GetPosition();
 	}
 
-	// update agents
 	for (int i = 0; i < Agents.Num(); i++)
 	{
 		ASteeringAgent* agent = Agents[i];
 
-		// move agent to correct cell if needed
+		auto steering = pPrioritySteering->CalculateSteering(DeltaTime, *agent);
+
+		agent->AddMovementInput(FVector(steering.LinearVelocity.X, steering.LinearVelocity.Y, 0.f));
+
 		pPartitionedSpace->UpdateAgentCell(*agent, OldPositions[i]);
 
-		// register neighbors for this agent
 		pPartitionedSpace->RegisterNeighbors(*agent, NeighborhoodRadius);
-
-		// calculate steering and move
-		auto steering = pPrioritySteering->CalculateSteering(DeltaTime, *agent);
-		agent->AddMovementInput(FVector{steering.LinearVelocity, 0.f});
 	}
+
+	if (DebugRenderPartitions)
+		pPartitionedSpace->RenderCells();
+
 #else
-	// fallback without spatial partitioning
+// fallback without partitioning
 	for (auto agent : Agents)
 	{
 		RegisterNeighbors(agent);
 		auto steering = pPrioritySteering->CalculateSteering(DeltaTime, *agent);
-		agent->AddMovementInput(FVector{steering.LinearVelocity, 0.f});
+		agent->AddMovementInput(FVector(steering.LinearVelocity.X, steering.LinearVelocity.Y, 0.f));
 	}
 #endif
 }
