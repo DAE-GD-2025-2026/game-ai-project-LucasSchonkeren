@@ -9,6 +9,7 @@ SteeringOutput SteeringBehaviourSeek::CalculateSteering(float DeltaT, ASteeringA
 	SteeringOutput steering{};
 	
 	steering.LinearVelocity = Target.Position - Agent.GetPosition();
+	steering.LinearVelocity.Normalize();
 	
 	// Add debug stuff
 	
@@ -87,6 +88,7 @@ SteeringOutput SteeringBehaviourWander::CalculateSteering(float DeltaT, ASteerin
 	wanderTarget += WanderDistance * FVector2D{forwardVec.X, forwardVec.Y};
 
 	steering.LinearVelocity = wanderTarget - Agent.GetPosition();
+	steering.LinearVelocity.Normalize();
 	
 	// Add debug stuff
 	

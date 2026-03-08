@@ -22,7 +22,7 @@ Flock::Flock(
 		{
 		double x = FMath::FRandRange(-1000.0, 1000.0);
 		double y = FMath::FRandRange(-1000.0, 1000.0);
-			Agents[i] = pWorld->SpawnActor<ASteeringAgent>(AgentClass, FVector{x, y,90}, FRotator::ZeroRotator);
+		Agents[i] = pWorld->SpawnActor<ASteeringAgent>(AgentClass, FVector{x, y,90}, FRotator::ZeroRotator);
 		}
 	}
 }
@@ -39,6 +39,12 @@ void Flock::Tick(float DeltaTime)
   // TODO: register the neighbors for this agent (-> fill the memory pool with the neighbors for the currently evaluated agent)
   // TODO: update the agent (-> the steeringbehaviors use the neighbors in the memory pool)
   // TODO: trim the agent to the world
+  
+	pBlendedSteering->GetWeightedBehaviorsRef()[0].Weight = CohesionWeight;
+	pBlendedSteering->GetWeightedBehaviorsRef()[1].Weight = SeparationWeight;
+	pBlendedSteering->GetWeightedBehaviorsRef()[2].Weight = AlignmentWeight;
+	pBlendedSteering->GetWeightedBehaviorsRef()[3].Weight = SeekWeight;
+	pBlendedSteering->GetWeightedBehaviorsRef()[4].Weight = WanderWeight;
   
 	for (auto agent : Agents) {
 		RegisterNeighbors(agent);
@@ -98,6 +104,13 @@ void Flock::ImGuiRender(ImVec2 const& WindowPos, ImVec2 const& WindowSize)
 		ImGui::Spacing();
 
   // TODO: implement ImGUI sliders for steering behavior weights here
+  
+		ImGui::SliderFloat("Cohesion weight", &CohesionWeight, 0.f, 100.f);
+		ImGui::SliderFloat("Alignment weight", &AlignmentWeight, 0.f, 100.f);
+		ImGui::SliderFloat("Separation weight", &SeparationWeight, 0.f, 100.f);
+		ImGui::SliderFloat("Seek weight", &SeekWeight, 0.f, 100.f);
+		ImGui::SliderFloat("Wander weight", &WanderWeight, 0.f, 100.f);
+		
 		//End
 		ImGui::End();
 	}
@@ -117,7 +130,7 @@ void Flock::RegisterNeighbors(ASteeringAgent* const pAgent)
 	NrOfNeighbors = 0;
 	for (auto agent : Agents) {
 		if (agent == pAgent) continue;
-		if ((agent->GetPosition() - pAgent->GetPosition()).SizeSquared() > NeighborhoodRadius * NeighborhoodRadius) {
+		if ((agent->GetPosition() - pAgent->GetPosition()).SizeSquared() < NeighborhoodRadius * NeighborhoodRadius) {
 			neighbours[NrOfNeighbors] = agent;
 			NrOfNeighbors += 1;
 			if (NrOfNeighbors >= maxNeighbours) break;
@@ -155,6 +168,6 @@ FVector2D Flock::GetAverageNeighborVelocity() const
 
 void Flock::SetTarget_Seek(FSteeringParams const& Target)
 {
- // TODO: Implement
+	pSeekBehavior->SetTarget(Target);
 }
 

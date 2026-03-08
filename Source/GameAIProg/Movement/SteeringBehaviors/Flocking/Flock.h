@@ -76,11 +76,19 @@ private:
 	//std::unique_ptr<Evade> pEvadeBehavior{};
 	
 	std::unique_ptr<BlendedSteering> pBlendedSteering{std::make_unique<BlendedSteering>(std::vector<BlendedSteering::WeightedBehavior>({
-		BlendedSteering::WeightedBehavior{pSeparationBehavior.get(), 30},
-		BlendedSteering::WeightedBehavior{pCohesionBehavior.get(), 40}, 
-		BlendedSteering::WeightedBehavior{pVelMatchBehavior.get(), 30}
+		BlendedSteering::WeightedBehavior{pCohesionBehavior.get(), 0}, 
+		BlendedSteering::WeightedBehavior{pSeparationBehavior.get(), 0},
+		BlendedSteering::WeightedBehavior{pVelMatchBehavior.get(), 0},
+		BlendedSteering::WeightedBehavior{pSeekBehavior.get(), 0},
+		BlendedSteering::WeightedBehavior{pWanderBehavior.get(), 0}
 	}))};
 	std::unique_ptr<PrioritySteering> pPrioritySteering{};
+
+	float CohesionWeight{35};
+	float SeparationWeight{25};
+	float AlignmentWeight{10};
+	float SeekWeight{20};
+	float WanderWeight{10};
 
 	// UI and rendering
 	bool DebugRenderSteering{false};
