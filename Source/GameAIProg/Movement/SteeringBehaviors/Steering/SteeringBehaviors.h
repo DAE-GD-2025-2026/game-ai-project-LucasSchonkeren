@@ -79,20 +79,23 @@ public: //------------ Constructor/Destructor --------------
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+	
+private:
+	float MinDistance{200.f};
 };
 
 class SteeringBehaviourWander final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
 	SteeringBehaviourWander() = default;
-
+ 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 	
 private: //-------------- Fields ----------------------------
 
 	const double Radius{20};
-	const double MaxDeviation{0.1};
+	const double MaxDeviation{0.05};
 	const double WanderDistance{5};
 	
 	double m_Offset{};

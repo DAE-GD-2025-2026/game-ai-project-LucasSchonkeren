@@ -1,3 +1,2 @@
-# Game AI Project
+# Flocking and Spatial Partitioning
 
-Feel free to edit the readme to your liking

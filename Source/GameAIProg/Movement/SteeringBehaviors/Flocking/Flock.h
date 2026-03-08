@@ -73,7 +73,7 @@ private:
 	std::unique_ptr<Alignmment> pVelMatchBehavior{std::make_unique<Alignmment>(this)};
 	std::unique_ptr<SteeringBehaviourSeek> pSeekBehavior{std::make_unique<SteeringBehaviourSeek>()};
 	std::unique_ptr<SteeringBehaviourWander> pWanderBehavior{std::make_unique<SteeringBehaviourWander>()};
-	//std::unique_ptr<Evade> pEvadeBehavior{};
+	std::unique_ptr<SteeringBehaviourEvade> pEvadeBehavior{std::make_unique<SteeringBehaviourEvade>()};
 	
 	std::unique_ptr<BlendedSteering> pBlendedSteering{std::make_unique<BlendedSteering>(std::vector<BlendedSteering::WeightedBehavior>({
 		BlendedSteering::WeightedBehavior{pCohesionBehavior.get(), 0}, 
@@ -82,7 +82,9 @@ private:
 		BlendedSteering::WeightedBehavior{pSeekBehavior.get(), 0},
 		BlendedSteering::WeightedBehavior{pWanderBehavior.get(), 0}
 	}))};
-	std::unique_ptr<PrioritySteering> pPrioritySteering{};
+	std::unique_ptr<PrioritySteering> pPrioritySteering{std::make_unique<PrioritySteering>(std::vector<ISteeringBehavior*>{
+		pEvadeBehavior.get(), pBlendedSteering.get()
+	})};
 
 	float CohesionWeight{35};
 	float SeparationWeight{25};
@@ -91,7 +93,7 @@ private:
 	float WanderWeight{10};
 
 	// UI and rendering
-	bool DebugRenderSteering{false};
+	bool DebugRenderSteering{true};
 	bool DebugRenderNeighborhood{true};
 	bool DebugRenderPartitions{true};
 

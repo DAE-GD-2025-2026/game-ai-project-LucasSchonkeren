@@ -46,9 +46,12 @@ void Flock::Tick(float DeltaTime)
 	pBlendedSteering->GetWeightedBehaviorsRef()[3].Weight = SeekWeight;
 	pBlendedSteering->GetWeightedBehaviorsRef()[4].Weight = WanderWeight;
   
+	pEvadeBehavior->SetTarget(FTargetData{pAgentToEvade->GetPosition()});
+	pAgentToEvade->SetSteeringBehavior(pWanderBehavior.get());
+  
 	for (auto agent : Agents) {
 		RegisterNeighbors(agent);
-		auto steering {pBlendedSteering->CalculateSteering(DeltaTime, *agent)};
+		auto steering {pPrioritySteering->CalculateSteering(DeltaTime, *agent)};
 		agent->AddMovementInput(FVector{steering.LinearVelocity, 0.f});
 	}
 }

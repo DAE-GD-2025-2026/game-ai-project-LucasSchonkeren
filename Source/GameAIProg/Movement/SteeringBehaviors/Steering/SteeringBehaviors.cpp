@@ -71,7 +71,10 @@ SteeringOutput SteeringBehaviourEvade::CalculateSteering(float DeltaT, ASteering
 	FVector2D predictedPosition = (distance/Agent.GetMaxLinearSpeed()) * Target.LinearVelocity + Target.Position;
 	
 	steering.LinearVelocity = -(predictedPosition - Agent.GetPosition());
+	steering.LinearVelocity.Normalize();
 	
+	if (distance > MinDistance) 
+		steering.IsValid = false;
 	
 	// Add debug stuff
 	
