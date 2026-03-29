@@ -4,7 +4,7 @@ class Flock;
 
 //COHESION - FLOCKING
 //*******************
-class Cohesion final : public SteeringBehaviourSeek
+class Cohesion final : public Seek
 {
 public:
 	Cohesion(Flock* const pFlock) :pFlock(pFlock) {};
@@ -19,7 +19,7 @@ private:
 //SEPARATION - FLOCKING
 //*********************
 
-class Separation final : public SteeringBehaviourSeek
+class Separation final : public Seek
 {
 public:
 	Separation(Flock* const pFlock) :pFlock(pFlock) {};
@@ -34,7 +34,7 @@ private:
 //VELOCITY MATCH - FLOCKING
 //************************
 
-class Alignmment final : public SteeringBehaviourSeek
+class Alignmment final : public Seek
 {
 public:
 	Alignmment(Flock* const pFlock) :pFlock(pFlock) {};

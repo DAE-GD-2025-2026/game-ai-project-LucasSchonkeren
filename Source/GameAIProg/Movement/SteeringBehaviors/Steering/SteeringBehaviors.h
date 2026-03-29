@@ -29,20 +29,20 @@ protected:
 	FTargetData Target;
 };
 
-class SteeringBehaviourSeek : public ISteeringBehavior
+class Seek : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
-	SteeringBehaviourSeek() = default;
+	Seek() = default;
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 	
 };
 
-class SteeringBehaviourFlee final : public ISteeringBehavior
+class Flee final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
-	SteeringBehaviourFlee() = default;
+	Flee() = default;
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
@@ -50,37 +50,39 @@ public: //--------------- Behaviour methods ----------------
 	
 };
 
-class SteeringBehaviourArrive final : public ISteeringBehavior
+class Arrive final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
-	SteeringBehaviourArrive(float slowRadius, float targetRadius);
+	Arrive(float slowRadius = 40.f, float targetRadius = 10.f);
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+	
+	void SetTargetRadius(float NewRadius);
 	
 private: //-------------- Fields ----------------------------
 
-const float BaseMaxSpeed{500};
-const float SlowRadius{20};
-const float TargetRadius{20};
+ float BaseMaxSpeed{500};
+ float SlowRadius{20};
+ float TargetRadius{20};
 
 float m_MaxSpeed{BaseMaxSpeed};
 
 };
 
-class SteeringBehaviourPursuit final : public ISteeringBehavior
+class Pursuit final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
-	SteeringBehaviourPursuit() = default;
+	Pursuit() = default;
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 };
 
-class SteeringBehaviourEvade final : public ISteeringBehavior
+class Evade final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
-	SteeringBehaviourEvade() = default;
+	Evade() = default;
 
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
@@ -90,10 +92,10 @@ private:
 	float MinDistance{200.f};
 };
 
-class SteeringBehaviourWander final : public ISteeringBehavior
+class Wander final : public ISteeringBehavior
 {
 public: //------------ Constructor/Destructor --------------
-	SteeringBehaviourWander() = default;
+	Wander() = default;
  
 public: //--------------- Behaviour methods ----------------
 	SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;

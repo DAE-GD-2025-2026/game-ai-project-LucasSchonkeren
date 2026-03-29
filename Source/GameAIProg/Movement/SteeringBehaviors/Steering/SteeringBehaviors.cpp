@@ -4,7 +4,7 @@
 #include "Math/UnrealMathUtility.h"
 
 // --- SEEK ---
-SteeringOutput SteeringBehaviourSeek::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+SteeringOutput Seek::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
 	SteeringOutput steering{};
 	
 	steering.LinearVelocity = Target.Position - Agent.GetPosition();
@@ -22,7 +22,7 @@ SteeringOutput SteeringBehaviourSeek::CalculateSteering(float DeltaT, ASteeringA
 }
 
 // --- FLEE ---
-SteeringOutput SteeringBehaviourFlee::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+SteeringOutput Flee::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
 	SteeringOutput steering{};
 	
 	steering.LinearVelocity = -(Target.Position - Agent.GetPosition());
@@ -40,13 +40,13 @@ SteeringOutput SteeringBehaviourFlee::CalculateSteering(float DeltaT, ASteeringA
 }
 
 // --- ARRIVE ---
-SteeringBehaviourArrive::SteeringBehaviourArrive(float slowRadius, float targetRadius) :
+Arrive::Arrive(float slowRadius, float targetRadius) :
 	SlowRadius(slowRadius),
 	TargetRadius(targetRadius)
 {
 }
 
-SteeringOutput SteeringBehaviourArrive::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+SteeringOutput Arrive::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
 	SteeringOutput steering{};
 	
 	double distance = (Target.Position - Agent.GetPosition()).Length();
@@ -69,8 +69,12 @@ SteeringOutput SteeringBehaviourArrive::CalculateSteering(float DeltaT, ASteerin
 	return steering;
 }
 
+void Arrive::SetTargetRadius(float NewRadius) {
+	TargetRadius = NewRadius;	
+}	
+
 // --- PURSUIT ---
-SteeringOutput SteeringBehaviourPursuit::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+SteeringOutput Pursuit::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
 	SteeringOutput steering{};
 	
 	double distance = (Target.Position - Agent.GetPosition()).Length();
@@ -94,7 +98,7 @@ SteeringOutput SteeringBehaviourPursuit::CalculateSteering(float DeltaT, ASteeri
 }
 
 // --- EVADE ---
-SteeringOutput SteeringBehaviourEvade::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+SteeringOutput Evade::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
 	SteeringOutput steering{};
 	
 	double distance = (Target.Position - Agent.GetPosition()).Length();
@@ -120,7 +124,7 @@ SteeringOutput SteeringBehaviourEvade::CalculateSteering(float DeltaT, ASteering
 }
 
 // --- WANDER ---
-SteeringOutput SteeringBehaviourWander::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
+SteeringOutput Wander::CalculateSteering(float DeltaT, ASteeringAgent& Agent) {
 	SteeringOutput steering{};
 	
 	m_Offset += FMath::RandRange(-MaxDeviation, MaxDeviation);

@@ -75,9 +75,9 @@ private:
 	std::unique_ptr<Separation> pSeparationBehavior{std::make_unique<Separation>(this)};
 	std::unique_ptr<Cohesion> pCohesionBehavior{std::make_unique<Cohesion>(this)};
 	std::unique_ptr<Alignmment> pVelMatchBehavior{std::make_unique<Alignmment>(this)};
-	std::unique_ptr<SteeringBehaviourSeek> pSeekBehavior{std::make_unique<SteeringBehaviourSeek>()};
-	std::unique_ptr<SteeringBehaviourWander> pWanderBehavior{std::make_unique<SteeringBehaviourWander>()};
-	std::unique_ptr<SteeringBehaviourEvade> pEvadeBehavior{std::make_unique<SteeringBehaviourEvade>()};
+	std::unique_ptr<Seek> pSeekBehavior{std::make_unique<Seek>()};
+	std::unique_ptr<Wander> pWanderBehavior{std::make_unique<Wander>()};
+	std::unique_ptr<Evade> pEvadeBehavior{std::make_unique<Evade>()};
 	
 	std::unique_ptr<BlendedSteering> pBlendedSteering{std::make_unique<BlendedSteering>(std::vector<BlendedSteering::WeightedBehavior>({
 		BlendedSteering::WeightedBehavior{pCohesionBehavior.get(), 0}, 
